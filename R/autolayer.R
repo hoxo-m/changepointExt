@@ -20,6 +20,7 @@ autolayer.cpt_combination <- function(object, ...) {
       df <- cpt_df
     } else {
       df <- full_join(df, cpt_df, by="change_point")
+      df <- arrange(df, change_point)
       df <- fill(df, -change_point)
       df <- mutate(df, mean = mean.x + mean.y)
       df <- select(df, change_point, mean)
@@ -31,7 +32,7 @@ autolayer.cpt_combination <- function(object, ...) {
   labels <- rep(NA_character_, length(cpt_inds))
   names(labels) <- paste0("N", cpt_inds)
   for (i in seq_along(cpt_inds_list)) {
-    labels[paste0("N", cpt_inds_list[i])] <- object$labels[i]
+    labels[paste0("N", cpt_inds_list[[i]])] <- object$labels[i]
   }
 
   df <- mutate(df, last = lag(mean))
