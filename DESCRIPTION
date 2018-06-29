@@ -1,0 +1,17 @@
+Package: changepointExt
+Title: Extension for 'changepoint'
+Version: 0.0.0.9000
+Authors@R: person("Koji", "Makiyama", email = "hoxo.smile@gmail.com", role = c("aut", "cre"))
+Description: Extension for 'changepoint'.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends: 
+  changepoint
+Imports:
+  dplyr,
+  ggfortify,
+  ggplot2,
+  tidyr,
+  zoo
+RoxygenNote: 6.0.1
