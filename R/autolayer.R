@@ -46,7 +46,12 @@ autolayer.cpt_combination <- function(object, ...) {
   list(lay1, lay2)
 }
 
+#' @importFrom grDevices hcl
+default_palette <- function(n, l = 65) {
+  hues <- seq(15, 375, length = n + 1)
+  hcl(h = hues, l = l, c = 100)[1:n]
+}
+
 my_palette <- function(n) {
-  hues <- seq(15, 375, length = n + 2)
-  hcl(h = hues, l = 65, c = 100)[2:(n+1)]
+  default_palette(n + 1)[-1]
 }
