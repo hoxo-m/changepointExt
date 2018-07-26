@@ -20,10 +20,10 @@ autoplot.cpt <- function(object, cpt.col = "red", cpt.width = 1, cpt.style = 1,
   }
 }
 
-#' @importFrom zoo index
+#' @importFrom zoo index zoo
 autoplot_cpt_mean <- function(cpt, cpt.col = "red", cpt.width = 1,
                               cpt.style = 1, ...) {
-  ts <- data.set.ts(cpt)
+  ts <- data.set.ts2(cpt)
   g <- autoplot(ts, ...) + xlab("Time") + ylab("data.set.ts(x)")
 
   cpt_inds <- cpts(cpt)

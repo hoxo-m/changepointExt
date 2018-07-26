@@ -1,6 +1,6 @@
 Package: changepointExt
 Title: Extension for 'changepoint'
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: person("Koji", "Makiyama", email = "hoxo.smile@gmail.com", role = c("aut", "cre"))
 Description: Extension for 'changepoint'.
 License: MIT + file LICENSE

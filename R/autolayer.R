@@ -9,12 +9,13 @@ autolayer <- function(object, ...) {
 #' @export
 autolayer.cpt_combination <- function(object, ...) {
   cpt_list <- object$cpt_list
+  operator <- get(object$operator)
 
   df <- data.frame()
   for (cpt in cpt_list) {
     means <- param.est(cpt)$mean
     cpt_inds <- c(1, cpts(cpt))
-    change_points <- index(data.set.ts(cpt))[cpt_inds]
+    change_points <- index(data.set.ts2(cpt))[cpt_inds]
     cpt_df <- data.frame(change_point = change_points, mean = means)
     if (nrow(df) == 0) {
       df <- cpt_df
@@ -22,7 +23,8 @@ autolayer.cpt_combination <- function(object, ...) {
       df <- full_join(df, cpt_df, by="change_point")
       df <- arrange(df, change_point)
       df <- fill(df, -change_point)
-      df <- mutate(df, mean = mean.x + mean.y)
+      # df <- mutate(df, mean = mean.x + mean.y)
+      df <- mutate(df, mean = operator(mean.x, mean.y))
       df <- select(df, change_point, mean)
     }
   }
@@ -42,7 +44,9 @@ autolayer.cpt_combination <- function(object, ...) {
   lay1 <- geom_segment(data = df, aes(x = change_point, xend = change_point,
                                       y = last, yend = mean, color = label),
                        arrow = arrow(), size = 1.5)
-  lay2 <- scale_color_manual(values = my_palette(length(cpt_list)))
+  m <- list(...)$m
+  if (is.null(m)) m <- 1
+  lay2 <- scale_color_manual(values = my_palette(length(cpt_list), m))
   list(lay1, lay2)
 }
 
@@ -52,6 +56,10 @@ default_palette <- function(n, l = 65) {
   hcl(h = hues, l = l, c = 100)[1:n]
 }
 
-my_palette <- function(n) {
-  default_palette(n + 1)[-1]
+my_palette <- function(n, m = 1) {
+  if (m == 0) {
+    default_palette(n)
+  } else {
+    default_palette(n + m)[-seq_len(m)]
+  }
 }
