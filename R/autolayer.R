@@ -1,9 +1,8 @@
+#' @importFrom ggplot2 autolayer
 #' @export
-autolayer <- function(object, ...) {
-  UseMethod("autolayer")
-}
+ggplot2::autolayer
 
-#' @import dplyr
+#' @import dplyr ggplot2
 #' @importFrom tidyr fill
 #' @importFrom zoo index
 #' @export
