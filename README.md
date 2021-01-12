@@ -1,3 +1,5 @@
+Koji MAKIYAMA (@hoxo\_m)
+
 # Extension for changepoint Package
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -24,7 +26,6 @@ autoplot(cpt_y)
 ![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
 ``` r
-
 cpt_x1 <- cpt.meanvar(x1, method = "PELT")
 autoplot(cpt_x1)
 ```
@@ -39,7 +40,6 @@ autoplot(cpt_x2)
 ![](README_files/figure-gfm/unnamed-chunk-1-3.png)<!-- -->
 
 ``` r
-
 combi <- combine_cpts("x1" = cpt_x1, "x2" = cpt_x2)
 autoplot(cpt_y) + autolayer(combi)
 ```

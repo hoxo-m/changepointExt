@@ -1,7 +1,3 @@
-#' @importFrom ggplot2 autolayer
-#' @export
-ggplot2::autolayer
-
 #' @import dplyr ggplot2
 #' @importFrom tidyr fill
 #' @importFrom zoo index

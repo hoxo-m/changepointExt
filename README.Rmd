@@ -1,10 +1,6 @@
 ---
 author: Koji MAKIYAMA (@hoxo_m)
-output:
-  md_document:
-    variant: gfm
-  html_document:
-    keep_md: true
+output: github_document
 ---
 
 # Extension for changepoint Package
