@@ -1,5 +1,5 @@
 #' @import dplyr ggplot2
-#' @importFrom tidyr fill
+#' @importFrom tidyr fill replace_na
 #' @importFrom zoo index
 #' @export
 autolayer.cpt_combination <- function(object, ...) {
@@ -7,34 +7,27 @@ autolayer.cpt_combination <- function(object, ...) {
   operator <- get(object$operator)
 
   df <- data.frame()
-  for (cpt in cpt_list) {
+  for (i in seq_along(cpt_list)) {
+    label <- object$labels[i]
+    cpt <- cpt_list[[i]]
     means <- param.est(cpt)$mean
-    cpt_inds <- c(1, cpts(cpt))
+    cpt_inds <- c(1, cpts(cpt) + 1e-6 * i)
     change_points <- index(data.set.ts2(cpt))[cpt_inds]
-    cpt_df <- data.frame(change_point = change_points, mean = means)
+    cpt_df <- data.frame(cpt_ind = cpt_inds, change_point = change_points, mean = means, label = label, stringsAsFactors = FALSE)
     if (nrow(df) == 0) {
       df <- cpt_df
     } else {
-      df <- full_join(df, cpt_df, by="change_point")
-      df <- arrange(df, change_point)
-      df <- fill(df, -change_point)
-      # df <- mutate(df, mean = mean.x + mean.y)
-      df <- mutate(df, mean = operator(mean.x, mean.y))
-      df <- select(df, change_point, mean)
+      df <- full_join(df, cpt_df, by = c("cpt_ind", "change_point"))
+      df <- arrange(df, cpt_ind)
+      df <- replace_na(df, list(label.x = "", label.y = ""))
+      df <- fill(df, -cpt_ind)
+      df <- mutate(df, mean = operator(mean.x, mean.y), label = paste0(label.x, label.y))
+      df <- select(df, cpt_ind, change_point, mean, label)
     }
-  }
-
-  cpt_inds_list <- lapply(cpt_list, function(x) cpts(x))
-  cpt_inds <- cpt_inds_list %>% unlist %>% unique %>% sort
-  labels <- rep(NA_character_, length(cpt_inds))
-  names(labels) <- paste0("N", cpt_inds)
-  for (i in seq_along(cpt_inds_list)) {
-    labels[paste0("N", cpt_inds_list[[i]])] <- object$labels[i]
   }
 
   df <- mutate(df, last = lag(mean))
   df <- slice(df, -1)
-  df <- mutate(df, label = labels)
 
   lay1 <- geom_segment(data = df, aes(x = change_point, xend = change_point,
                                       y = last, yend = mean, color = label),
