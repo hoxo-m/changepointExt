@@ -6,6 +6,11 @@ autolayer.cpt_combination <- function(object, ...) {
   cpt_list <- object$cpt_list
   operator <- get(object$operator)
 
+  if (operator == "/") {
+    cpt_list[[2L]]@param.est$mean <- 1 / cpt_list[[2L]]@param.est$mean
+    operator <- "*"
+  }
+
   df <- data.frame()
   for (i in seq_along(cpt_list)) {
     label <- object$labels[i]
@@ -19,7 +24,7 @@ autolayer.cpt_combination <- function(object, ...) {
     } else {
       df <- full_join(df, cpt_df, by = c("cpt_ind", "change_point"))
       df <- arrange(df, cpt_ind)
-      df <- replace_na(df, list(label.x = "", label.y = ""))
+      df <- tidyr::replace_na(df, list(label.x = "", label.y = ""))
       df <- fill(df, -cpt_ind)
       df <- mutate(df, mean = operator(mean.x, mean.y), label = paste0(label.x, label.y))
       df <- select(df, cpt_ind, change_point, mean, label)
