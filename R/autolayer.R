@@ -4,11 +4,11 @@
 #' @export
 autolayer.cpt_combination <- function(object, ...) {
   cpt_list <- object$cpt_list
-  operator <- get(object$operator)
 
-  if (operator == "/") {
+  operator <- get(object$operator)
+  if (object$operator == "/") {
     cpt_list[[2L]]@param.est$mean <- 1 / cpt_list[[2L]]@param.est$mean
-    operator <- "*"
+    operator <- get("*")
   }
 
   df <- data.frame()
